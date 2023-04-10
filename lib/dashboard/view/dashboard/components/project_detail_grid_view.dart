@@ -61,6 +61,29 @@ class _ProjectDetailGridViewState extends State<ProjectDetailGridView> {
                   Row(
                     children: [
                       TextButton(
+                          onPressed: () {
+                            store.gridVM.setSelectedRow(store
+                                .projectDetails.analysisLogs!
+                                .indexWhere((element) =>
+                                    element.versionUuid ==
+                                    store
+                                        .gridVM.dataGridController!.selectedRow!
+                                        .getCells()[13]
+                                        .value
+                                        .toString()));
+                          },
+                          child: const Text(Strings.getRowData)),
+                      TextButton(
+                          onPressed: () {
+                            store.gridVM.clearSelectedRow();
+                            store.gridVM.clearSelectedRowsList();
+                          },
+                          child: const Text(Strings.clearSelection)),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
                         child: const Text(Strings.selectDate),
                         onPressed: () {
                           _showDialog(context);

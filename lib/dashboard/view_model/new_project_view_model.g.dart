@@ -217,6 +217,22 @@ mixin _$NewProjectViewModel on _NewProjectViewModelBase, Store {
     });
   }
 
+  late final _$isFetchLoadingAtom =
+      Atom(name: '_NewProjectViewModelBase.isFetchLoading', context: context);
+
+  @override
+  bool? get isFetchLoading {
+    _$isFetchLoadingAtom.reportRead();
+    return super.isFetchLoading;
+  }
+
+  @override
+  set isFetchLoading(bool? value) {
+    _$isFetchLoadingAtom.reportWrite(value, super.isFetchLoading, () {
+      super.isFetchLoading = value;
+    });
+  }
+
   late final _$statusAtom =
       Atom(name: '_NewProjectViewModelBase.status', context: context);
 
@@ -405,6 +421,28 @@ mixin _$NewProjectViewModel on _NewProjectViewModelBase, Store {
   }
 
   @override
+  void setIsFetchLoading(bool value) {
+    final _$actionInfo = _$_NewProjectViewModelBaseActionController.startAction(
+        name: '_NewProjectViewModelBase.setIsFetchLoading');
+    try {
+      return super.setIsFetchLoading(value);
+    } finally {
+      _$_NewProjectViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool getIsFetchLoading() {
+    final _$actionInfo = _$_NewProjectViewModelBaseActionController.startAction(
+        name: '_NewProjectViewModelBase.getIsFetchLoading');
+    try {
+      return super.getIsFetchLoading();
+    } finally {
+      _$_NewProjectViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 project: ${project},
@@ -420,6 +458,7 @@ projectKee: ${projectKee},
 isBranchExist: ${isBranchExist},
 isButtonEnabled: ${isButtonEnabled},
 issuesList: ${issuesList},
+isFetchLoading: ${isFetchLoading},
 status: ${status},
 valid: ${valid}
     ''';

@@ -48,6 +48,8 @@ abstract class _NewProjectViewModelBase with Store {
   bool? isButtonEnabled;
   @observable
   TypesModel? issuesList;
+  @observable
+  bool? isFetchLoading;
 
   @action
   Future<void> getSingleProject(String projectUuid) async {
@@ -130,20 +132,32 @@ abstract class _NewProjectViewModelBase with Store {
 
   @action
   Future<void> login(String username, String password) async {
-    status = await SonarWebApiService().login(username, password);
+    status = await SonarMemoryApiService().login(username, password);
   }
 
   @action
   Future<void> getValid() async {
-    valid = await SonarWebApiService().getValid();
+    valid = await SonarMemoryApiService().getValid();
   }
 
   @action
   Future<int> getIssuesCount(
       String severity, String type, String projectKey, String branch) async {
-    var temp = await SonarWebApiService()
-        .getIssues(severity, type, projectKey, branch);
+    setIsFetchLoading(true);
+    var temp = await SonarMemoryApiService()
+        .getSonarQubeIssues(severity, type, projectKey, branch);
+    setIsFetchLoading(false);
     return temp;
+  }
+
+  @action
+  void setIsFetchLoading(bool value) {
+    isFetchLoading = value;
+  }
+
+  @action
+  bool getIsFetchLoading() {
+    return isFetchLoading!;
   }
 
   @action
@@ -189,6 +203,6 @@ abstract class _NewProjectViewModelBase with Store {
     _issuesList.vulnerabilities.blocker =
         await getIssuesCount('BLOCKER', 'VULNERABILITY', projectKey, branch);
     issuesList = _issuesList;
-    inspect(issuesList);
+    setIsFetchLoading(false);
   }
 }

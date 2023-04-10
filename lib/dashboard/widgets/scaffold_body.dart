@@ -11,7 +11,7 @@ class ScaffoldBody extends StatelessWidget {
       children: [
         if (Responsive.isDesktop(context))
           Flexible(flex: 1, child: Container()),
-        middleBlock,
+        Flexible(flex: 2, child: middleBlock),
         if (Responsive.isDesktop(context))
           Flexible(flex: 1, child: Container()),
       ],

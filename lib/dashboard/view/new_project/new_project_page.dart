@@ -55,89 +55,89 @@ class _NewProjectPageState extends State<NewProjectPage> {
     );
   }
 
-  Flexible buildMiddleContainerBlock(BuildContext context) {
-    return Flexible(
-      flex: 2,
-      child: Container(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: Dimens.margin_24,
-            right: Dimens.margin_24,
-            top: Dimens.margin_24,
+  Widget buildMiddleContainerBlock(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: Dimens.margin_24,
+        right: Dimens.margin_24,
+        top: Dimens.margin_24,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Observer(builder: (_) {
+            return Text(
+              store.newProjectVM.project?[0].name.toString() ?? Strings.noName,
+              style: const TextStyle(fontSize: Dimens.Title1),
+              textAlign: TextAlign.start,
+            );
+          }),
+          ChipList(),
+          const SizedBox(height: Dimens.margin_16),
+          Observer(builder: (_) {
+            return Text(
+              store.newProjectVM.branchKee!.toUpperCase().toString(),
+              style: const TextStyle(fontSize: Dimens.Title2),
+              textAlign: TextAlign.start,
+            );
+          }),
+          const SizedBox(height: Dimens.margin_16),
+          IssuesMeasuresCard(),
+          const SizedBox(height: Dimens.margin_16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimens.margin_16),
+            child: Container(
+              child: Column(
+                children: [
+                  buildTextFieldRow(
+                      "Version Name: ", "Version Name", _versionNameController),
+                  buildTextFieldRow(
+                      "Commit No: ", "Commit No", _commitNoController),
+                  const SizedBox(height: Dimens.margin_48),
+                  Container(
+                    width: double.infinity,
+                    child: Observer(builder: (_) {
+                      if (_versionNameController.text == "" ||
+                          _commitNoController.text == "") {
+                        store.newProjectVM.setButtonEnabled(false);
+                      } else {
+                        store.newProjectVM.setButtonEnabled(true);
+                      }
+                      if (store.newProjectVM.isFetchLoading!) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return buildSubmitElevatedButton(context);
+                      }
+                    }),
+                  )
+                ],
+              ),
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Observer(builder: (_) {
-                return Text(
-                  store.newProjectVM.project?[0].name.toString() ??
-                      Strings.noName,
-                  style: const TextStyle(fontSize: Dimens.Title1),
-                  textAlign: TextAlign.start,
-                );
-              }),
-              SizedBox(height: 50, child: ChipList()),
-              const SizedBox(height: Dimens.margin_16),
-              Observer(builder: (_) {
-                return Text(
-                  store.newProjectVM.branchKee!.toUpperCase().toString(),
-                  style: const TextStyle(fontSize: Dimens.Title2),
-                  textAlign: TextAlign.start,
-                );
-              }),
-              const SizedBox(height: Dimens.margin_16),
-              IssuesMeasuresCard(),
-              const SizedBox(height: Dimens.margin_16),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: Dimens.margin_16),
-                child: Container(
-                  child: Column(
-                    children: [
-                      buildTextFieldRow("Version Name: ", "Version Name",
-                          _versionNameController),
-                      buildTextFieldRow(
-                          "Commit No: ", "Commit No", _commitNoController),
-                      const SizedBox(height: Dimens.margin_48),
-                      Container(
-                        width: double.infinity,
-                        child: Observer(builder: (_) {
-                          if (_versionNameController.text == "" ||
-                              _commitNoController.text == "") {
-                            store.newProjectVM.setButtonEnabled(false);
-                          } else {
-                            store.newProjectVM.setButtonEnabled(true);
-                          }
-                          return buildSubmitElevatedButton(context);
-                        }),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+        ],
       ),
     );
   }
 
-  ElevatedButton buildSubmitElevatedButton(BuildContext context) {
+  Widget buildSubmitElevatedButton(BuildContext context) {
     return ElevatedButton(
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.all(Dimens.margin_16),
-        child: Text(
-          "SUBMIT",
-          style: TextStyle(color: Colors.white),
-        ),
+        child: (store.newProjectVM.isFetchLoading!)
+            ? const CircularProgressIndicator()
+            : Text(
+                "SUBMIT",
+                style: TextStyle(color: Colors.white),
+              ),
       ),
-      onPressed: !store.newProjectVM.isButtonEnabled!
+      onPressed: (!store.newProjectVM.isButtonEnabled!)
           ? null
           : () async {
               final versionId = _uuid.v4();
               final analysisId = _uuid.v4();
-              print("isExistingProject: $isExistingProject");
               if (isExistingProject! == false) {
                 await store.newProjectVM.postProject(NewProjectModel(
                     project: ProjectsModel(

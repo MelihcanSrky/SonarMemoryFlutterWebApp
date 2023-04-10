@@ -26,28 +26,6 @@ class AnalysisHistory extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Row(
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        store.gridVM.setSelectedRow(store
-                            .projectDetails.analysisLogs!
-                            .indexWhere((element) =>
-                                element.versionUuid ==
-                                store.gridVM.dataGridController!.selectedRow!
-                                    .getCells()[13]
-                                    .value
-                                    .toString()));
-                      },
-                      child: const Text(Strings.getRowData)),
-                  TextButton(
-                      onPressed: () {
-                        store.gridVM.clearSelectedRow();
-                        store.gridVM.clearSelectedRowsList();
-                      },
-                      child: const Text(Strings.clearSelection)),
-                ],
-              ),
             ],
           ),
           const SizedBox(height: Dimens.margin_16),

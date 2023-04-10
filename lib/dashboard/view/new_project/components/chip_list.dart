@@ -68,7 +68,7 @@ class _ChipListState extends State<ChipList> {
                       backgroundColor: (projectBranches![index].uuid ==
                               store.newProjectVM.branchUuid)
                           ? Colors.red
-                          : Colors.red.withOpacity(0.5),
+                          : Colors.red[300],
                       label: Text(
                         store.newProjectVM.projectsm1Branches?[index].kee
                                 .toString() ??

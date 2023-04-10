@@ -6,13 +6,18 @@ import 'dart:async';
 import '../dashboard/models/analysis_issues.dart';
 import '../dashboard/models/analysis_logs.dart';
 import '../dashboard/models/issues_model.dart';
+import '../dashboard/models/login_model.dart';
 import '../dashboard/models/new_projectModel.dart';
 import '../dashboard/models/measures_model.dart';
 import '../dashboard/models/project_branches_model.dart';
 import '../dashboard/models/response_model.dart';
+import '../dashboard/models/web_api_issues_model.dart';
+import '../dashboard/utils/constants.dart';
 
 class SonarMemoryApiService {
   static const String _baseUrl = 'http://localhost:5000/api';
+  static const apiKey = Constants.API_KEY;
+  final encodedApiKey = base64.encode(utf8.encode(apiKey + ":"));
 
   Future<List<MeasuresModel>> getMeasures(String db, String projectUuid) async {
     final response = await http.get(Uri.parse(
@@ -98,7 +103,6 @@ class SonarMemoryApiService {
 
   Future<ResponseModel> postAnalysisIssues(
       AnalysisIssuesPostModel issuesList) async {
-    print(issuesList.analysisIssues);
     final response =
         await http.post(Uri.parse('$_baseUrl/sonarmemory2/analysis/issues'),
             headers: <String, String>{
@@ -176,6 +180,54 @@ class SonarMemoryApiService {
           status: 200, message: "Successfully deleted Analysis Logs!");
     } else {
       throw Exception('Failed to delete Analysis Logs!');
+    }
+  }
+
+  //////// SonarQube
+
+  Future<LoginModel> login(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/sonarQube/login'),
+      body: jsonEncode({"username": username, "password": password}),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return LoginModel(status: true);
+    } else {
+      throw Exception('Failed to load login');
+    }
+  }
+
+  Future<ValidModel> getValid() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/sonarQube/validate'),
+      headers: <String, String>{
+        "Authorization": "Basic $encodedApiKey",
+      },
+    );
+    if (response.statusCode == 200) {
+      return ValidModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load valid');
+    }
+  }
+
+  Future<int> getSonarQubeIssues(
+      String severity, String type, String projectKey, String branch) async {
+    final response = await http.get(
+      Uri.parse(
+          '$_baseUrl/sonarQube/issues?severities=$severity&types=$type&componentKeys=$projectKey&branch=$branch'),
+      headers: <String, String>{
+        "Authorization": "Basic $encodedApiKey",
+      },
+    );
+    if (response.statusCode == 200) {
+      return WebApiIssuesModel.fromJson(jsonDecode(response.body)).total!;
+    } else {
+      throw Exception(
+          'Failed to load issues ' + response.statusCode.toString());
     }
   }
 }

@@ -15,15 +15,20 @@ class IssuesMeasuresCard extends StatelessWidget {
       return Card(
           child: Padding(
         padding: const EdgeInsets.all(Dimens.margin_8),
-        child: Column(
-          children: [
-            MeasuresList(
-              measures: store.newProjectVM.measures,
-            ),
-            IssuesList(
-              issues: store.newProjectVM.issues,
-            ),
-          ],
+        child: Container(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height * 0.2,
+          ),
+          child: Column(
+            children: [
+              MeasuresList(
+                measures: store.newProjectVM.measures,
+              ),
+              IssuesList(
+                issues: store.newProjectVM.issues,
+              ),
+            ],
+          ),
         ),
       ));
     });
