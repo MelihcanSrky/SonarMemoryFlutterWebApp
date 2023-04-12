@@ -15,6 +15,8 @@ abstract class _BaseViewModelBase with Store {
 
   @observable
   bool? isDarkMode;
+  @observable
+  String? currentRoute;
 
   @action
   void init() {
@@ -26,5 +28,10 @@ abstract class _BaseViewModelBase with Store {
   @action
   void changeTheme() {
     isDarkMode = !isDarkMode!;
+  }
+
+  @action
+  void changeRoute(String route) {
+    currentRoute = route;
   }
 }

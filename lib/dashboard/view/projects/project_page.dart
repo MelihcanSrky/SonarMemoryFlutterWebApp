@@ -5,6 +5,7 @@ import 'package:flutter_sonar_app/dashboard/view/main_page.dart';
 import 'package:flutter_sonar_app/dashboard/view/projects/components/projects_grid_view.dart';
 import 'package:flutter_sonar_app/dashboard/widgets/scaffold_body.dart';
 
+import '../../controllers/main_screen_controller.dart';
 import '../../utils/dimens.dart';
 import '../../utils/strings.dart';
 
@@ -19,6 +20,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
   @override
   void initState() {
     super.initState();
+    store.changeRoute(Applinks.PROJECTS);
     store.projectNBranchesVM.getProjectsNBranches();
   }
 

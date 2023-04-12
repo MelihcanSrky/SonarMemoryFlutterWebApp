@@ -25,6 +25,22 @@ mixin _$BaseViewModel on _BaseViewModelBase, Store {
     });
   }
 
+  late final _$currentRouteAtom =
+      Atom(name: '_BaseViewModelBase.currentRoute', context: context);
+
+  @override
+  String? get currentRoute {
+    _$currentRouteAtom.reportRead();
+    return super.currentRoute;
+  }
+
+  @override
+  set currentRoute(String? value) {
+    _$currentRouteAtom.reportWrite(value, super.currentRoute, () {
+      super.currentRoute = value;
+    });
+  }
+
   late final _$_BaseViewModelBaseActionController =
       ActionController(name: '_BaseViewModelBase', context: context);
 
@@ -51,9 +67,21 @@ mixin _$BaseViewModel on _BaseViewModelBase, Store {
   }
 
   @override
+  void changeRoute(String route) {
+    final _$actionInfo = _$_BaseViewModelBaseActionController.startAction(
+        name: '_BaseViewModelBase.changeRoute');
+    try {
+      return super.changeRoute(route);
+    } finally {
+      _$_BaseViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-isDarkMode: ${isDarkMode}
+isDarkMode: ${isDarkMode},
+currentRoute: ${currentRoute}
     ''';
   }
 }

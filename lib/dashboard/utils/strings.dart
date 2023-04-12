@@ -1,5 +1,5 @@
 mixin Strings {
-  static const appTitle = 'SonarQube App';
+  static const appTitle = 'SonarMemory';
   static const noData = 'No data';
   static const sonarmemory = 'sonarmemory';
   static const sonarmemory2 = 'sonarmemory2';

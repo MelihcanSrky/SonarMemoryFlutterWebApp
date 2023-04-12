@@ -16,6 +16,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     store.init();
+    store.changeRoute(Applinks.PROJECTS);
     return Scaffold(
       body: SafeArea(
           child: Row(

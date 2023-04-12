@@ -57,6 +57,7 @@ class _ProjectsGridViewState extends State<ProjectsGridView> {
                     .difference(sm2Branches!.toSet())
                     .isEmpty;
                 if (isProjectExist && isBranchExist) {
+                  store.changeRoute(Applinks.DASHBOARD);
                   Get.offNamed(Applinks.DASHBOARD, arguments: {
                     "projectUuid": store
                         .projectNBranchesVM.sm2ProjectsNBranches!
@@ -182,6 +183,7 @@ class _ProjectsGridViewState extends State<ProjectsGridView> {
               ),
               SimpleDialogOption(
                 onPressed: () {
+                  store.changeRoute(Applinks.DASHBOARD);
                   Get.offNamed(Applinks.DASHBOARD, arguments: {
                     "projectUuid": store
                         .projectNBranchesVM.sm2ProjectsNBranches!

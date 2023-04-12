@@ -15,7 +15,7 @@ import '../dashboard/models/web_api_issues_model.dart';
 import '../dashboard/utils/constants.dart';
 
 class SonarMemoryApiService {
-  static const String _baseUrl = 'http://localhost:5000/api';
+  static const String _baseUrl = Constants.BASE_URL;
   static const apiKey = Constants.API_KEY;
   final encodedApiKey = base64.encode(utf8.encode(apiKey + ":"));
 
