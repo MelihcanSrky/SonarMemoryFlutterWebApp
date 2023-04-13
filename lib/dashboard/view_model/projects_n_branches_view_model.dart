@@ -12,6 +12,10 @@ abstract class _ProjectsNBranchesViewModelBase with Store {
   List<ProjectsNBranchesModel>? sm1ProjectsNBranches;
   @observable
   List<ProjectsNBranchesModel>? sm2ProjectsNBranches;
+  @observable
+  List<ProjectsNBranchesModel>? _sm1ProjectsNBranches;
+  @observable
+  List<ProjectsNBranchesModel>? _sm2ProjectsNBranches;
 
   @action
   Future<void> getProjectsNBranches() async {
@@ -19,5 +23,17 @@ abstract class _ProjectsNBranchesViewModelBase with Store {
         await SonarMemoryApiService().getProjectsNBranches("sonarmemory", null);
     sm2ProjectsNBranches = await SonarMemoryApiService()
         .getProjectsNBranches("sonarmemory2", null);
+    _sm1ProjectsNBranches = sm1ProjectsNBranches;
+    _sm2ProjectsNBranches = sm2ProjectsNBranches;
+  }
+
+  @action
+  void filterProjects(String searchQuery) {
+    sm1ProjectsNBranches = _sm1ProjectsNBranches!
+        .where((element) => element.name!.contains(searchQuery))
+        .toList();
+    sm2ProjectsNBranches = _sm2ProjectsNBranches!
+        .where((element) => element.name!.contains(searchQuery))
+        .toList();
   }
 }

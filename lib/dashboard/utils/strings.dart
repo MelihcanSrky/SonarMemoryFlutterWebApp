@@ -14,6 +14,7 @@ mixin Strings {
   static const allProjects = 'All Projects';
   static const noProjects = 'No Projects';
   static const projectDetail = 'Project Detail';
+  static const search = 'Search';
 
   //dashboard
   static const sonarMemory = 'Sonar Memory';

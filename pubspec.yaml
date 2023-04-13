@@ -49,6 +49,7 @@ dependencies:
   syncfusion_flutter_charts:
   provider: ^5.0.0
   get: ^4.3.6
+  flutter_staggered_grid_view:
 
 dev_dependencies:
   flutter_test:

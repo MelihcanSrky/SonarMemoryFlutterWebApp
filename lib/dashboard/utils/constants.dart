@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constants {
   static const API_KEY = "sqa_0ef3bca6b228f98914f623cee13bfe6fe4293afd";
-  static const BASE_URL = "http://sonar.netcad.com:5000/api";
+  static const BASE_URL = "http://localhost:5000/api";
 
   static const metricsList = [
     {"Bugs": "AYYiToXu9esxNIBLsvrJ"},

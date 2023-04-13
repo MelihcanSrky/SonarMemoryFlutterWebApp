@@ -42,17 +42,35 @@ class _ProjectsPageState extends State<ProjectsPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      Strings.allProjects,
-                      style: TextStyle(fontSize: Dimens.Title1),
+                    Row(
+                      children: [
+                        const Text(
+                          Strings.allProjects,
+                          style: TextStyle(fontSize: Dimens.Title1),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              store.projectNBranchesVM.getProjectsNBranches();
+                            },
+                            icon: const Icon(Icons.refresh)),
+                      ],
                     ),
-                    IconButton(
-                        onPressed: () {
-                          store.projectNBranchesVM.getProjectsNBranches();
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                    ),
+                    Flexible(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: Strings.search,
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                        onChanged: (value) {
+                          store.projectNBranchesVM.filterProjects(value);
                         },
-                        icon: const Icon(Icons.refresh))
+                      ),
+                    ),
                   ],
                 ),
                 Observer(builder: (_) {
