@@ -36,8 +36,6 @@ class _NewProjectPageState extends State<NewProjectPage> {
   @override
   void initState() {
     super.initState();
-    store.newProjectVM.login("SonarMemory", "l6k5j4h3g2f1");
-    store.newProjectVM.getValid();
     store.newProjectVM.getSingleProject(uuid!);
     store.newProjectVM.getMeasures(uuid!);
     store.newProjectVM.getIssues(uuid!);
@@ -148,8 +146,18 @@ class _NewProjectPageState extends State<NewProjectPage> {
                   updatedAt: store.newProjectVM.project?[0].updatedAt,
                   deleted: false,
                 )));
+                if (store.newProjectVM.newProjectError != null) {
+                  Get.snackbar(
+                    "Error",
+                    store.newProjectVM.newProjectError.toString(),
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                }
               }
-              if (!isBranchExisting!) {
+              if (!isBranchExisting! &&
+                  store.newProjectVM.newProjectError == null) {
                 await store.newProjectVM
                     .postProjectBranch(PostProjectsBranchesModel(
                         branch: ProjectBranchesSubModel(
@@ -175,144 +183,8 @@ class _NewProjectPageState extends State<NewProjectPage> {
                   deleted: false,
                 )));
               }
-              await store.newProjectVM.postAnalysisLogs(AnalysisLogsPostModel(
-                  analysisLog: AnalysisLogsModel(
-                analysisUuid: analysisId,
-                projectUuid: store.newProjectVM.branchUuid.toString(),
-                versionUuid: versionId,
-                versionName: _versionNameController.text,
-                createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
-                lines: double.parse(store.newProjectVM.measures
-                        ?.where((element) =>
-                            element.metricUuid ==
-                            Constants.metricsList[3].values.first)
-                        .first
-                        .value
-                        .toString() ??
-                    "0"),
-                reliability: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[4].values.first)
-                    .first
-                    .text_value,
-                security: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[5].values.first)
-                    .first
-                    .text_value,
-                securityReview: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[6].values.first)
-                    .first
-                    .text_value,
-                coverage: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[7].values.first)
-                    .first
-                    .value,
-                duplication: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[8].values.first)
-                    .first
-                    .value,
-                cyclomatic: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[9].values.first)
-                    .first
-                    .value,
-                cognitive: store.newProjectVM.measures
-                    ?.where((element) =>
-                        element.metricUuid ==
-                        Constants.metricsList[10].values.first)
-                    .first
-                    .value,
-                commitNo: _commitNoController.text,
-              )));
-              await store.newProjectVM.postAnalysisIssues(
-                  AnalysisIssuesPostModel(analysisIssues: <AnalysisIssuesModel>[
-                for (var issues in Constants.analysisIssuesList)
-                  AnalysisIssuesModel(
-                    analysisUuid: analysisId,
-                    metricUuid: issues.values.first,
-                    major: (issues.keys.first == "Bugs")
-                        ? store.newProjectVM.issuesList?.bugs.major
-                                .toString() ??
-                            "0"
-                        : (issues.keys.first == "Vulnerabilities")
-                            ? store.newProjectVM.issuesList?.vulnerabilities
-                                    .major
-                                    .toString() ??
-                                "0"
-                            : (issues.keys.first == "Code Smells")
-                                ? store.newProjectVM.issuesList?.codeSmells
-                                        .major
-                                        .toString() ??
-                                    "0"
-                                : (issues.keys.first == "Security Hotspots")
-                                    ? store.newProjectVM.measures
-                                            ?.where((element) =>
-                                                element.metricUuid ==
-                                                Constants.analysisIssuesList[3]
-                                                    .values.first)
-                                            .toList()[0]
-                                            .value
-                                            .toString() ??
-                                        "0"
-                                    : "0",
-                    minor: (issues.keys.first == "Bugs")
-                        ? store.newProjectVM.issuesList?.bugs.minor
-                                .toString() ??
-                            "0"
-                        : (issues.keys.first == "Vulnerabilities")
-                            ? store.newProjectVM.issuesList?.vulnerabilities
-                                    .minor
-                                    .toString() ??
-                                "0"
-                            : (issues.keys.first == "Code Smells")
-                                ? store.newProjectVM.issuesList?.codeSmells
-                                        .minor
-                                        .toString() ??
-                                    "0"
-                                : "0",
-                    blocker: (issues.keys.first == "Bugs")
-                        ? store.newProjectVM.issuesList?.bugs.blocker
-                                .toString() ??
-                            "0"
-                        : (issues.keys.first == "Vulnerabilities")
-                            ? store.newProjectVM.issuesList?.vulnerabilities
-                                    .blocker
-                                    .toString() ??
-                                "0"
-                            : (issues.keys.first == "Code Smells")
-                                ? store.newProjectVM.issuesList?.codeSmells
-                                        .blocker
-                                        .toString() ??
-                                    "0"
-                                : "0",
-                    critical: (issues.keys.first == "Bugs")
-                        ? store.newProjectVM.issuesList?.bugs.critical
-                                .toString() ??
-                            "0"
-                        : (issues.keys.first == "Vulnerabilities")
-                            ? store.newProjectVM.issuesList?.vulnerabilities
-                                    .critical
-                                    .toString() ??
-                                "0"
-                            : (issues.keys.first == "Code Smells")
-                                ? store.newProjectVM.issuesList?.codeSmells
-                                        .critical
-                                        .toString() ??
-                                    "0"
-                                : "0",
-                  )
-              ]));
-              if (isBranchExisting!) {
+              if (isBranchExisting! &&
+                  store.newProjectVM.newProjectError == null) {
                 await store.newProjectVM.updateProjectBranchDate(
                     store.newProjectVM.branchUuid.toString(),
                     store.newProjectVM.projectsm1Branches!
@@ -321,6 +193,151 @@ class _NewProjectPageState extends State<NewProjectPage> {
                         .first
                         .updatedAt
                         .toString());
+              }
+              if (store.newProjectVM.newProjectError == null) {
+                await store.newProjectVM.postAnalysisLogs(AnalysisLogsPostModel(
+                    analysisLog: AnalysisLogsModel(
+                  analysisUuid: analysisId,
+                  projectUuid: store.newProjectVM.branchUuid.toString(),
+                  versionUuid: versionId,
+                  versionName: _versionNameController.text,
+                  createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
+                  lines: double.parse(store.newProjectVM.measures
+                          ?.where((element) =>
+                              element.metricUuid ==
+                              Constants.metricsList[3].values.first)
+                          .first
+                          .value
+                          .toString() ??
+                      "0"),
+                  reliability: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[4].values.first)
+                      .first
+                      .text_value,
+                  security: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[5].values.first)
+                      .first
+                      .text_value,
+                  securityReview: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[6].values.first)
+                      .first
+                      .text_value,
+                  coverage: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[7].values.first)
+                      .first
+                      .value,
+                  duplication: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[8].values.first)
+                      .first
+                      .value,
+                  cyclomatic: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[9].values.first)
+                      .first
+                      .value,
+                  cognitive: store.newProjectVM.measures
+                      ?.where((element) =>
+                          element.metricUuid ==
+                          Constants.metricsList[10].values.first)
+                      .first
+                      .value,
+                  commitNo: _commitNoController.text,
+                )));
+              }
+              if (store.newProjectVM.newProjectError == null) {
+                await store.newProjectVM.postAnalysisIssues(
+                    AnalysisIssuesPostModel(
+                        analysisIssues: <AnalysisIssuesModel>[
+                      for (var issues in Constants.analysisIssuesList)
+                        AnalysisIssuesModel(
+                          analysisUuid: analysisId,
+                          metricUuid: issues.values.first,
+                          major: (issues.keys.first == "Bugs")
+                              ? store.newProjectVM.issuesList?.bugs.major
+                                      .toString() ??
+                                  "0"
+                              : (issues.keys.first == "Vulnerabilities")
+                                  ? store.newProjectVM.issuesList
+                                          ?.vulnerabilities.major
+                                          .toString() ??
+                                      "0"
+                                  : (issues.keys.first == "Code Smells")
+                                      ? store.newProjectVM.issuesList
+                                              ?.codeSmells.major
+                                              .toString() ??
+                                          "0"
+                                      : (issues.keys.first ==
+                                              "Security Hotspots")
+                                          ? store.newProjectVM.measures
+                                                  ?.where((element) =>
+                                                      element.metricUuid ==
+                                                      Constants
+                                                          .analysisIssuesList[3]
+                                                          .values
+                                                          .first)
+                                                  .toList()[0]
+                                                  .value
+                                                  .toString() ??
+                                              "0"
+                                          : "0",
+                          minor: (issues.keys.first == "Bugs")
+                              ? store.newProjectVM.issuesList?.bugs.minor
+                                      .toString() ??
+                                  "0"
+                              : (issues.keys.first == "Vulnerabilities")
+                                  ? store.newProjectVM.issuesList
+                                          ?.vulnerabilities.minor
+                                          .toString() ??
+                                      "0"
+                                  : (issues.keys.first == "Code Smells")
+                                      ? store.newProjectVM.issuesList
+                                              ?.codeSmells.minor
+                                              .toString() ??
+                                          "0"
+                                      : "0",
+                          blocker: (issues.keys.first == "Bugs")
+                              ? store.newProjectVM.issuesList?.bugs.blocker
+                                      .toString() ??
+                                  "0"
+                              : (issues.keys.first == "Vulnerabilities")
+                                  ? store.newProjectVM.issuesList
+                                          ?.vulnerabilities.blocker
+                                          .toString() ??
+                                      "0"
+                                  : (issues.keys.first == "Code Smells")
+                                      ? store.newProjectVM.issuesList
+                                              ?.codeSmells.blocker
+                                              .toString() ??
+                                          "0"
+                                      : "0",
+                          critical: (issues.keys.first == "Bugs")
+                              ? store.newProjectVM.issuesList?.bugs.critical
+                                      .toString() ??
+                                  "0"
+                              : (issues.keys.first == "Vulnerabilities")
+                                  ? store.newProjectVM.issuesList
+                                          ?.vulnerabilities.critical
+                                          .toString() ??
+                                      "0"
+                                  : (issues.keys.first == "Code Smells")
+                                      ? store.newProjectVM.issuesList
+                                              ?.codeSmells.critical
+                                              .toString() ??
+                                          "0"
+                                      : "0",
+                        )
+                    ]));
               }
               store.projectNBranchesVM.getProjectsNBranches();
               Navigator.pop(context);

@@ -53,7 +53,7 @@ class SonarMemoryApiService {
     if (response.statusCode == 201) {
       return ResponseModel(status: 201, message: "Successfully added Project!");
     } else {
-      throw Exception('Failed to add Project!');
+      return ResponseModel(status: 400, message: "Failed to add Project!");
     }
   }
 
@@ -66,9 +66,11 @@ class SonarMemoryApiService {
         },
         body: jsonEncode(projectBranch));
     if (response.statusCode == 201) {
-      return ResponseModel(status: 201, message: "Successfully added Project!");
+      return ResponseModel(
+          status: 201, message: "Successfully added Project Branches!");
     } else {
-      throw Exception('Failed to add Project!');
+      return ResponseModel(
+          status: 400, message: "Failed to add Project Branches!");
     }
   }
 
@@ -95,9 +97,11 @@ class SonarMemoryApiService {
             },
             body: jsonEncode(analysisLog));
     if (response.statusCode == 201) {
-      return ResponseModel(status: 201, message: "Successfully added Project!");
+      return ResponseModel(
+          status: 201, message: "Successfully added Analysis Logs!");
     } else {
-      throw Exception('Failed to add Project!');
+      return ResponseModel(
+          status: 400, message: "Failed to add Analysis Logs!");
     }
   }
 
@@ -110,9 +114,11 @@ class SonarMemoryApiService {
             },
             body: jsonEncode(issuesList));
     if (response.statusCode == 201) {
-      return ResponseModel(status: 201, message: "Successfully added Project!");
+      return ResponseModel(
+          status: 201, message: "Successfully added Analysis Issues!");
     } else {
-      throw Exception('Failed to add Project!');
+      return ResponseModel(
+          status: 400, message: "Failed to add Analysis Issues!");
     }
   }
 

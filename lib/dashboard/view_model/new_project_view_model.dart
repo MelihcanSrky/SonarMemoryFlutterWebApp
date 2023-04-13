@@ -50,6 +50,8 @@ abstract class _NewProjectViewModelBase with Store {
   TypesModel? issuesList;
   @observable
   bool? isFetchLoading;
+  @observable
+  bool? newProjectError;
 
   @action
   Future<void> getSingleProject(String projectUuid) async {
@@ -78,7 +80,11 @@ abstract class _NewProjectViewModelBase with Store {
 
   @action
   Future<void> postProject(NewProjectModel project) async {
-    response = await SonarMemoryApiService().postProject(project);
+    response = await SonarMemoryApiService().postProject(project).then((value) {
+      if (value.status == 400) {
+        newProjectError = true;
+      }
+    });
   }
 
   @action
@@ -87,8 +93,13 @@ abstract class _NewProjectViewModelBase with Store {
   @action
   Future<void> postProjectBranch(
       PostProjectsBranchesModel projectBranch) async {
-    response =
-        await SonarMemoryApiService().postProjectsBranches(projectBranch);
+    response = await SonarMemoryApiService()
+        .postProjectsBranches(projectBranch)
+        .then((value) {
+      if (value.status == 400) {
+        newProjectError = true;
+      }
+    });
   }
 
   @action
@@ -100,12 +111,24 @@ abstract class _NewProjectViewModelBase with Store {
 
   @action
   Future<void> postAnalysisLogs(AnalysisLogsPostModel analysisLog) async {
-    response = await SonarMemoryApiService().postAnalysisLogs(analysisLog);
+    response = await SonarMemoryApiService()
+        .postAnalysisLogs(analysisLog)
+        .then((value) {
+      if (value.status == 400) {
+        newProjectError = true;
+      }
+    });
   }
 
   @action
   Future<void> postAnalysisIssues(AnalysisIssuesPostModel analysisIssue) async {
-    response = await SonarMemoryApiService().postAnalysisIssues(analysisIssue);
+    response = await SonarMemoryApiService()
+        .postAnalysisIssues(analysisIssue)
+        .then((value) {
+      if (value.status == 400) {
+        newProjectError = true;
+      }
+    });
   }
 
   @action
