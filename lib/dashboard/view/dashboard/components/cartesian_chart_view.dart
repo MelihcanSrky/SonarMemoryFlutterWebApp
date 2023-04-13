@@ -28,6 +28,7 @@ class AnalysisCartesianChartView extends StatelessWidget {
                     primaryXAxis: CategoryAxis(),
                     series: <ChartSeries>[
                       LineSeries<ChartData, String>(
+                          name: "Bugs",
                           dataSource: [
                             for (var log
                                 in store.projectDetails.analysisLogs!.reversed)
@@ -38,6 +39,69 @@ class AnalysisCartesianChartView extends StatelessWidget {
                                               element.metricUuid ==
                                               Constants
                                                   .metricsList[0].values.first)
+                                          .toList()
+                                          .first
+                                          .total ??
+                                      '0'))
+                          ],
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          dataLabelSettings:
+                              DataLabelSettings(isVisible: true)),
+                      LineSeries<ChartData, String>(
+                          name: "Vulnerabilities",
+                          dataSource: [
+                            for (var log
+                                in store.projectDetails.analysisLogs!.reversed)
+                              ChartData(
+                                  x: log.createdAt,
+                                  y: double.parse(log.analysisIssues
+                                          ?.where((element) =>
+                                              element.metricUuid ==
+                                              Constants
+                                                  .metricsList[1].values.first)
+                                          .toList()
+                                          .first
+                                          .total ??
+                                      '0'))
+                          ],
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          dataLabelSettings:
+                              DataLabelSettings(isVisible: true)),
+                      LineSeries<ChartData, String>(
+                          name: "Code Smells",
+                          dataSource: [
+                            for (var log
+                                in store.projectDetails.analysisLogs!.reversed)
+                              ChartData(
+                                  x: log.createdAt,
+                                  y: double.parse(log.analysisIssues
+                                          ?.where((element) =>
+                                              element.metricUuid ==
+                                              Constants
+                                                  .metricsList[2].values.first)
+                                          .toList()
+                                          .first
+                                          .total ??
+                                      '0'))
+                          ],
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          dataLabelSettings:
+                              DataLabelSettings(isVisible: true)),
+                      LineSeries<ChartData, String>(
+                          name: "Security Hotspots",
+                          dataSource: [
+                            for (var log
+                                in store.projectDetails.analysisLogs!.reversed)
+                              ChartData(
+                                  x: log.createdAt,
+                                  y: double.parse(log.analysisIssues
+                                          ?.where((element) =>
+                                              element.metricUuid ==
+                                              Constants.metricsList.last.values
+                                                  .first)
                                           .toList()
                                           .first
                                           .total ??
