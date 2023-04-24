@@ -27,8 +27,10 @@ class _ProjectsPageState extends State<ProjectsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScaffoldBody(
-        middleBlock: buildMiddleContainerBlock(context),
+      body: SingleChildScrollView(
+        child: ScaffoldBody(
+          middleBlock: buildMiddleContainerBlock(context),
+        ),
       ),
     );
   }
@@ -36,63 +38,61 @@ class _ProjectsPageState extends State<ProjectsPage> {
   Flexible buildMiddleContainerBlock(BuildContext context) {
     return Flexible(
         flex: 4,
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          Strings.allProjects,
-                          style: TextStyle(fontSize: Dimens.Title1),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              store.projectNBranchesVM.getProjectsNBranches();
-                            },
-                            icon: const Icon(Icons.refresh)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                    ),
-                    Flexible(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: Strings.search,
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                        onChanged: (value) {
-                          store.projectNBranchesVM.filterProjects(value);
-                        },
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        Strings.allProjects,
+                        style: TextStyle(fontSize: Dimens.Title1),
                       ),
+                      IconButton(
+                          onPressed: () {
+                            store.projectNBranchesVM.getProjectsNBranches();
+                          },
+                          icon: const Icon(Icons.refresh)),
+                    ],
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                  ),
+                  Flexible(
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: Strings.search,
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                      onChanged: (value) {
+                        store.projectNBranchesVM.filterProjects(value);
+                      },
                     ),
-                  ],
-                ),
-                Observer(builder: (_) {
-                  if (store.projectNBranchesVM.sm1ProjectsNBranches == null ||
-                      store.projectNBranchesVM.sm2ProjectsNBranches == null) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return const Responsive(
-                      mobile: ProjectsGridView(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1,
-                      ),
-                      tablet: ProjectsGridView(),
-                      desktop: ProjectsGridView(
-                        crossAxisCount: 4,
-                        childAspectRatio: 1.6,
-                      ),
-                    );
-                  }
-                }),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              Observer(builder: (_) {
+                if (store.projectNBranchesVM.sm1ProjectsNBranches == null ||
+                    store.projectNBranchesVM.sm2ProjectsNBranches == null) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return const Responsive(
+                    mobile: ProjectsGridView(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1,
+                    ),
+                    tablet: ProjectsGridView(),
+                    desktop: ProjectsGridView(
+                      crossAxisCount: 4,
+                      childAspectRatio: 1.6,
+                    ),
+                  );
+                }
+              }),
+            ],
           ),
         ));
   }
