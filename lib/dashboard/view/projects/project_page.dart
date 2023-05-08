@@ -45,19 +45,30 @@ class _ProjectsPageState extends State<ProjectsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      const Text(
-                        Strings.allProjects,
-                        style: TextStyle(fontSize: Dimens.Title1),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            store.projectNBranchesVM.getProjectsNBranches();
-                          },
-                          icon: const Icon(Icons.refresh)),
-                    ],
-                  ),
+                  Observer(builder: (_) {
+                    return Row(
+                      children: [
+                        const Text(
+                          Strings.allProjects,
+                          style: TextStyle(fontSize: Dimens.Title1),
+                        ),
+                        if (store.projectNBranchesVM.isFetchLoading!)
+                          const Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(),
+                              ))
+                        else
+                          IconButton(
+                              onPressed: () {
+                                store.projectNBranchesVM.getProjectsNBranches();
+                              },
+                              icon: const Icon(Icons.refresh)),
+                      ],
+                    );
+                  }),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.3,
                   ),
