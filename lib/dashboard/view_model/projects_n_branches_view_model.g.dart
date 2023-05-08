@@ -45,6 +45,58 @@ mixin _$ProjectsNBranchesViewModel on _ProjectsNBranchesViewModelBase, Store {
     });
   }
 
+  late final _$_sm1ProjectsNBranchesAtom = Atom(
+      name: '_ProjectsNBranchesViewModelBase._sm1ProjectsNBranches',
+      context: context);
+
+  @override
+  List<ProjectsNBranchesModel>? get _sm1ProjectsNBranches {
+    _$_sm1ProjectsNBranchesAtom.reportRead();
+    return super._sm1ProjectsNBranches;
+  }
+
+  @override
+  set _sm1ProjectsNBranches(List<ProjectsNBranchesModel>? value) {
+    _$_sm1ProjectsNBranchesAtom.reportWrite(value, super._sm1ProjectsNBranches,
+        () {
+      super._sm1ProjectsNBranches = value;
+    });
+  }
+
+  late final _$_sm2ProjectsNBranchesAtom = Atom(
+      name: '_ProjectsNBranchesViewModelBase._sm2ProjectsNBranches',
+      context: context);
+
+  @override
+  List<ProjectsNBranchesModel>? get _sm2ProjectsNBranches {
+    _$_sm2ProjectsNBranchesAtom.reportRead();
+    return super._sm2ProjectsNBranches;
+  }
+
+  @override
+  set _sm2ProjectsNBranches(List<ProjectsNBranchesModel>? value) {
+    _$_sm2ProjectsNBranchesAtom.reportWrite(value, super._sm2ProjectsNBranches,
+        () {
+      super._sm2ProjectsNBranches = value;
+    });
+  }
+
+  late final _$isFetchLoadingAtom = Atom(
+      name: '_ProjectsNBranchesViewModelBase.isFetchLoading', context: context);
+
+  @override
+  bool? get isFetchLoading {
+    _$isFetchLoadingAtom.reportRead();
+    return super.isFetchLoading;
+  }
+
+  @override
+  set isFetchLoading(bool? value) {
+    _$isFetchLoadingAtom.reportWrite(value, super.isFetchLoading, () {
+      super.isFetchLoading = value;
+    });
+  }
+
   late final _$getProjectsNBranchesAsyncAction = AsyncAction(
       '_ProjectsNBranchesViewModelBase.getProjectsNBranches',
       context: context);
@@ -55,11 +107,38 @@ mixin _$ProjectsNBranchesViewModel on _ProjectsNBranchesViewModelBase, Store {
         .run(() => super.getProjectsNBranches());
   }
 
+  late final _$_ProjectsNBranchesViewModelBaseActionController =
+      ActionController(
+          name: '_ProjectsNBranchesViewModelBase', context: context);
+
+  @override
+  void filterProjects(String searchQuery) {
+    final _$actionInfo = _$_ProjectsNBranchesViewModelBaseActionController
+        .startAction(name: '_ProjectsNBranchesViewModelBase.filterProjects');
+    try {
+      return super.filterProjects(searchQuery);
+    } finally {
+      _$_ProjectsNBranchesViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFetchLoading(bool value) {
+    final _$actionInfo = _$_ProjectsNBranchesViewModelBaseActionController
+        .startAction(name: '_ProjectsNBranchesViewModelBase.setFetchLoading');
+    try {
+      return super.setFetchLoading(value);
+    } finally {
+      _$_ProjectsNBranchesViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 sm1ProjectsNBranches: ${sm1ProjectsNBranches},
-sm2ProjectsNBranches: ${sm2ProjectsNBranches}
+sm2ProjectsNBranches: ${sm2ProjectsNBranches},
+isFetchLoading: ${isFetchLoading}
     ''';
   }
 }

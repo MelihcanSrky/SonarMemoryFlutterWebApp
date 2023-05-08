@@ -16,15 +16,19 @@ abstract class _ProjectsNBranchesViewModelBase with Store {
   List<ProjectsNBranchesModel>? _sm1ProjectsNBranches;
   @observable
   List<ProjectsNBranchesModel>? _sm2ProjectsNBranches;
+  @observable
+  bool? isFetchLoading;
 
   @action
   Future<void> getProjectsNBranches() async {
+    setFetchLoading(true);
     sm1ProjectsNBranches =
         await SonarMemoryApiService().getProjectsNBranches("sonarmemory", null);
     sm2ProjectsNBranches = await SonarMemoryApiService()
         .getProjectsNBranches("sonarmemory2", null);
     _sm1ProjectsNBranches = sm1ProjectsNBranches;
     _sm2ProjectsNBranches = sm2ProjectsNBranches;
+    setFetchLoading(false);
   }
 
   @action
@@ -35,5 +39,10 @@ abstract class _ProjectsNBranchesViewModelBase with Store {
     sm2ProjectsNBranches = _sm2ProjectsNBranches!
         .where((element) => element.name!.contains(searchQuery))
         .toList();
+  }
+
+  @action
+  void setFetchLoading(bool value) {
+    isFetchLoading = value;
   }
 }

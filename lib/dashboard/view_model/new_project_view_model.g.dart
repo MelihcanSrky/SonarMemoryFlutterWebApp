@@ -233,6 +233,22 @@ mixin _$NewProjectViewModel on _NewProjectViewModelBase, Store {
     });
   }
 
+  late final _$newProjectErrorAtom =
+      Atom(name: '_NewProjectViewModelBase.newProjectError', context: context);
+
+  @override
+  bool? get newProjectError {
+    _$newProjectErrorAtom.reportRead();
+    return super.newProjectError;
+  }
+
+  @override
+  set newProjectError(bool? value) {
+    _$newProjectErrorAtom.reportWrite(value, super.newProjectError, () {
+      super.newProjectError = value;
+    });
+  }
+
   late final _$statusAtom =
       Atom(name: '_NewProjectViewModelBase.status', context: context);
 
@@ -459,6 +475,7 @@ isBranchExist: ${isBranchExist},
 isButtonEnabled: ${isButtonEnabled},
 issuesList: ${issuesList},
 isFetchLoading: ${isFetchLoading},
+newProjectError: ${newProjectError},
 status: ${status},
 valid: ${valid}
     ''';
